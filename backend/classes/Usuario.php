@@ -1,22 +1,28 @@
 <?php
-    class Producto
+    class Usuario
     {
         public $id;
-        public $nombre;
+        public $email;
+        public $password;
+        public $userType;
+        
+        public static function Login($email , $password){
 
-
-    public static function TraerProducto($id) 
-    {
-        $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
-        $consulta =$objetoAccesoDato->RetornarConsulta("SELECT * from test WHERE id= :id ");  
-        $consulta->bindValue(':id', $id, PDO::PARAM_STR);
-        $consulta->execute();
-        $producto= $consulta->fetchObject('Producto');
+            $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+            $consulta =$objetoAccesoDato->RetornarConsulta("SELECT * from usuarios WHERE email= :email and password= :password");  
+            $consulta->bindValue(':email', $email, PDO::PARAM_STR);
+            $consulta->bindValue(':password', $password, PDO::PARAM_STR);
+            $consulta->execute();
+            $usuario= $consulta->fetchObject('Usuario');
+                    
+            return $usuario;
+        }
+        public function TraerUsuarios($request, $response, $args) {
+            $objetoAccesoDato = AccesoDatos::dameUnObjetoAcceso(); 
+            $consulta =$objetoAccesoDato->RetornarConsulta("SELECT * FROM usuarios");
+            $consulta->execute();		
                 
-        return $producto;
-                                        
-    }
-
-
+            return $consulta->fetchAll(PDO::FETCH_CLASS, "Usuario");	
+        }
     }
 ?>
